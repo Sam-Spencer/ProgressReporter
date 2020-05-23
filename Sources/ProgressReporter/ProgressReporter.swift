@@ -32,17 +32,15 @@ import Foundation
 /// Create this in a `ProgressReporter` and use a `ProgressWatcher`
 /// for monitoring.
 ///
-public struct Progress {
+public struct TangibleProgress {
+    
+    internal init(completed: Int, total: Int) {
+        self.completed = completed
+        self.total = total
+    }
     
     /// Representation of progress towards completion.
-    /// This value is capped at the value of `total`
-    public var completed: Int {
-        didSet {
-            if total < completed {
-                total = completed
-            }
-        }
-    }
+    public var completed: Int
     
     /// Representation of total expected progress until completion.
     public var total: Int {
@@ -56,7 +54,9 @@ public struct Progress {
     /// Current percent towards completion from 0.0 to 1.0
     public var progress: Float {
         get {
-            return Float(completed / total)
+            let complete = Float(completed)
+            let totes = Float(total)
+            return complete / totes
         }
     }
     
@@ -78,8 +78,8 @@ public protocol ProgressCensus {
 /// A Progress Reporter is responsible for recieving updates
 /// from a Progress Census and deciding how to proceed with the
 /// given information (i.e. updating a UI).
-public protocol ProgressReporter {
-    func hasProgressToReport(report: Progress)
+public protocol ProgressWatcher {
+    func hasProgressToReport(report: TangibleProgress)
 }
 
 
@@ -97,14 +97,14 @@ public protocol ProgressReporter {
 ///     thus maintaining your own references and ensuring multiple instances of 
 ///     `ProgressWatcher` can be generated at once.
 /// 
-open class ProgressWatcher: ProgressCensus {
+open class ProgressCoordinator: ProgressCensus {
     
-    public static let shared = ProgressWatcher()
-    public var reporter: ProgressReporter?
+    public static let shared = ProgressCoordinator()
+    public var reporter: ProgressWatcher?
     
-    public var progress: Progress {
+    public var progress: TangibleProgress {
         get {
-            return Progress.init(completed: completedSteps, total: totalSteps)
+            return TangibleProgress.init(completed: completedSteps, total: totalSteps)
         }
     }
     
@@ -132,7 +132,7 @@ open class ProgressWatcher: ProgressCensus {
             reporter?.hasProgressToReport(report: progress)
         } else {
             DispatchQueue.main.async {
-                self.reporter?.hasProgressToReport(report: progress)
+                self.reporter?.hasProgressToReport(report: self.progress)
             }
         }
     }
