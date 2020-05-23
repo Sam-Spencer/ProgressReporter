@@ -34,7 +34,7 @@ import Foundation
 ///
 public struct TangibleProgress {
     
-    internal init(completed: Int, total: Int) {
+    public init(completed: Int, total: Int) {
         self.completed = completed
         self.total = total
     }
