@@ -23,6 +23,7 @@ final class ProgressReporterTests: XCTestCase {
     
     static var allTests = [
         ("testProgressValues", testProgressValues),
+        ("testProgressCoordinator", testProgressCoordinator)
     ]
     
 }
