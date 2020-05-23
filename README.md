@@ -5,6 +5,9 @@ A highly abstract method to coordinate input from multiple objects on the progre
 ## Why?
 There's really not much to it. If your project uses Swift and has complex or long-running tasks, try this out. **Maybe you won't have to reinvent the wheel.** I use it in my own projects for networking operations and Core Data migrations as well as complex data tasks... basically anything the user needs to see a progress bar for.
 
+## But what about `NSProgress`
+`NSProgress` works, and it works well. But, it was written in Objective-C for iOS 7 and uses KVO. And frankly, while it has some neat tricks (direct integration with Core Data for one), it's way overly complicated for what I need. This is simple, to the point, and light.
+
 ## Installation
 There's only one file. You can drag and drop it into your project as use as needed. Or if you're feeling fancy / lazy / extravagant you can use Swift Package Manager.
 
