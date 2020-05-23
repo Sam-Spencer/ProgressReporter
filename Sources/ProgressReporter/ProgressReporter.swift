@@ -129,10 +129,10 @@ open class ProgressCoordinator: ProgressCensus {
     
     private func updateReporterSafely() {
         if Thread.isMainThread {
-            reporter?.hasProgressToReport(report: progress)
+            watcher?.hasProgressToReport(report: progress)
         } else {
             DispatchQueue.main.async {
-                self.reporter?.hasProgressToReport(report: self.progress)
+                self.watcher?.hasProgressToReport(report: self.progress)
             }
         }
     }
