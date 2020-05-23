@@ -100,7 +100,7 @@ public protocol ProgressWatcher {
 open class ProgressCoordinator: ProgressCensus {
     
     public static let shared = ProgressCoordinator()
-    public var reporter: ProgressWatcher?
+    public var watcher: ProgressWatcher?
     
     public var progress: TangibleProgress {
         get {
