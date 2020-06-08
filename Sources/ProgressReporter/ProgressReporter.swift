@@ -117,6 +117,11 @@ open class ProgressCoordinator: ProgressCensus {
         }
     }
     
+    public init() {
+        completedSteps = 0
+        totalSteps = 1
+    }
+    
     public func reportProgress() {
         completedSteps = completedSteps + 1
         updateReporterSafely()
