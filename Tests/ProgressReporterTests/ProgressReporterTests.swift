@@ -19,11 +19,23 @@ final class ProgressReporterTests: XCTestCase {
             XCTAssertEqual(sharedCoordinator.progress.progress, Float(increment)/Float(sharedCoordinator.progress.total))
         }
         XCTAssertEqual(sharedCoordinator.progress.progress, 1.0)
+        sharedCoordinator.resetProgress()
+    }
+    
+    func testProgressReset() {
+        let sharedCoordinator = ProgressCoordinator.shared
+        sharedCoordinator.addStepsToProgress(additionalSteps: 10)
+        XCTAssertEqual(sharedCoordinator.progress.progress, 0.0)
+        sharedCoordinator.reportProgress(for: 11)
+        XCTAssertEqual(sharedCoordinator.progress.progress, 1.0)
+        sharedCoordinator.resetProgress()
+        XCTAssertEqual(sharedCoordinator.progress.progress, 0.0)
     }
     
     static var allTests = [
         ("testProgressValues", testProgressValues),
-        ("testProgressCoordinator", testProgressCoordinator)
+        ("testProgressCoordinator", testProgressCoordinator),
+        ("testProgressReset", testProgressReset)
     ]
     
 }

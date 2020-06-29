@@ -70,8 +70,9 @@ public struct TangibleProgress {
 ///   Instead, use the `ProgressWatcher` object.
 /// 
 public protocol ProgressCensus {
-    func reportProgress()
+    func reportProgress(for steps: Int)
     func addStepsToProgress(additionalSteps: Int)
+    func resetProgress()
 }
 
 
@@ -122,13 +123,19 @@ open class ProgressCoordinator: ProgressCensus {
         totalSteps = 1
     }
     
-    public func reportProgress() {
-        completedSteps = completedSteps + 1
+    public func reportProgress(for steps: Int = 1) {
+        completedSteps = completedSteps + steps
         updateReporterSafely()
     }
     
-    public func addStepsToProgress(additionalSteps: Int) {
+    public func addStepsToProgress(additionalSteps: Int = 1) {
         totalSteps = totalSteps + additionalSteps
+        updateReporterSafely()
+    }
+    
+    public func resetProgress() {
+        completedSteps = 0
+        totalSteps = 1
         updateReporterSafely()
     }
     
