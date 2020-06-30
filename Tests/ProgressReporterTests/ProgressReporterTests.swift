@@ -1,6 +1,7 @@
 import XCTest
 @testable import ProgressReporter
 
+@available(iOS 13.0, *)
 final class ProgressReporterTests: XCTestCase {
     
     func testProgressValues() {

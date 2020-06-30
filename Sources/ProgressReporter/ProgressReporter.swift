@@ -69,7 +69,8 @@ public struct TangibleProgress {
 /// - note: Adopting this protocol yourself is likely unnecessary.
 ///   Instead, use the `ProgressWatcher` object.
 /// 
-public protocol ProgressCensus {
+@available(iOS 13.0, *)
+public protocol ProgressCensus: ObservableObject {
     func reportProgress(for steps: Int)
     func addStepsToProgress(additionalSteps: Int)
     func resetProgress()
@@ -98,14 +99,16 @@ public protocol ProgressWatcher {
 ///     thus maintaining your own references and ensuring multiple instances of 
 ///     `ProgressWatcher` can be generated at once.
 /// 
+@available(iOS 13.0, *)
 open class ProgressCoordinator: ProgressCensus {
     
     public static let shared = ProgressCoordinator()
     public var watcher: ProgressWatcher?
     
+    @Published public var rawProgress: Float = 0.0
     public var progress: TangibleProgress {
         get {
-            return TangibleProgress.init(completed: completedSteps, total: totalSteps)
+            return TangibleProgress(completed: completedSteps, total: totalSteps)
         }
     }
     
@@ -142,9 +145,11 @@ open class ProgressCoordinator: ProgressCensus {
     private func updateReporterSafely() {
         if Thread.isMainThread {
             watcher?.hasProgressToReport(report: progress)
+            rawProgress = progress.progress
         } else {
             DispatchQueue.main.async {
                 self.watcher?.hasProgressToReport(report: self.progress)
+                self.rawProgress = self.progress.progress
             }
         }
     }
