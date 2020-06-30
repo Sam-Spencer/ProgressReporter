@@ -24,7 +24,7 @@
 // 
 
 import Foundation
-
+import Combine
 
 /// A mutable representation of tangible progress
 /// 
