@@ -105,6 +105,27 @@ open class ProgressCoordinator: ProgressCensus {
     public static let shared = ProgressCoordinator()
     public var watcher: ProgressWatcher?
     
+    /// A rough estimate of the amount of time (seconds) it will take for a single 
+    /// increment of progress when reported via `reportProgress(...)`
+    ///
+    /// This value should be coordinated with the `anticipatedIncrementBatchSize`.
+    /// `ProgressCoordinator` uses this in concert with the batch size to provide time estimates.
+    public var anticipatedTimeForIncrement: TimeInterval = 0.5
+    
+    /// An estimated batch size used to calculate an estimate of remaining time.
+    /// The default value is 1, meaning the batch size corresponds to one increment
+    /// of progress.
+    /// 
+    /// This is useful if you perform concurrent, asynchronous operations. For example,
+    /// if you use an `OperationQueue` to run multiple operations, you should specify
+    /// your expected maximum concurrent operation size.
+    /// 
+    /// Remember that the maximum concurrency sizes for an `OperationQueue` are much larger
+    /// in the iOS / iPadOS Simulator than they are on an actual device. Test this on-device
+    /// for the most accurate results.
+    public var anticipatedIncrementBatchSize: Int = 1
+    
+    @Published public var timeRemaining: TimeInterval = 0.0
     @Published public var rawProgress: Float = 0.0
     public var progress: TangibleProgress {
         get {
@@ -140,6 +161,21 @@ open class ProgressCoordinator: ProgressCensus {
         completedSteps = 0
         totalSteps = 1
         updateReporterSafely()
+    }
+    
+    @discardableResult
+    public func estimateTimeRemaining() -> TimeInterval {
+        let batch = Double(anticipatedIncrementBatchSize)
+        let count = Double(totalSteps)
+        let increment = anticipatedTimeForIncrement
+        
+        let batches = count / batch
+        let totalDuration = increment * batches
+        let remainingProgress = Double(progress.progress)
+        
+        let remainingDuration = totalDuration * remainingProgress
+        timeRemaining = TimeInterval(exactly: remainingDuration) ?? 0
+        return remainingDuration
     }
     
     private func updateReporterSafely() {
