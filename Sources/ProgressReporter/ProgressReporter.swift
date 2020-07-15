@@ -150,17 +150,20 @@ open class ProgressCoordinator: ProgressCensus {
     public func reportProgress(for steps: Int = 1) {
         completedSteps = completedSteps + steps
         updateReporterSafely()
+        estimateTimeRemaining()
     }
     
     public func addStepsToProgress(additionalSteps: Int = 1) {
         totalSteps = totalSteps + additionalSteps
         updateReporterSafely()
+        estimateTimeRemaining()
     }
     
     public func resetProgress() {
         completedSteps = 0
         totalSteps = 1
         updateReporterSafely()
+        estimateTimeRemaining()
     }
     
     @discardableResult
