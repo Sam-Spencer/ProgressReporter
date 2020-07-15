@@ -174,7 +174,7 @@ open class ProgressCoordinator: ProgressCensus {
         
         let batches = count / batch
         let totalDuration = increment * batches
-        let remainingProgress = Double(progress.progress)
+        let remainingProgress = 1.0 - Double(progress.progress)
         
         let remainingDuration = totalDuration * remainingProgress
         timeRemaining = TimeInterval(exactly: remainingDuration) ?? 0
