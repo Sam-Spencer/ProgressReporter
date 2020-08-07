@@ -8,6 +8,11 @@ There's really not much to it. If your project uses Swift and has complex or lon
 ## But what about `NSProgress`?
 `NSProgress` works, and it works well. But, it was written in Objective-C for iOS 7 and uses KVO. And frankly, while it has some neat tricks (direct integration with Core Data for one), it's way overly complicated for what I need. This is simple, to the point, and light.
 
+## @ObservableObject / `Combine` Support
+In the latest version of `ProgressReporter` you can setup a `ProgressCoordinator` as an `@ObservedObject` in your SwiftUI view. This will allow you to instantly update any progress indicators you may have created in your view(s) using `.onReceive`. This is yet **another reason to ditch `NSProgress`** in favor of `ProgressReporter`.
+
+The `progress` variable is published to any subscribing views. As a result, you'll be able to create beautiful progress updaters that can display multiple points of data simultaneously (i.e. estimated time remaining, animations, countdowns, bars, etc.).
+
 ## Installation
 There's only one file. You can drag and drop it into your project and use as needed. Or if you're feeling fancy / lazy / extravagant you can use Swift Package Manager.
 
