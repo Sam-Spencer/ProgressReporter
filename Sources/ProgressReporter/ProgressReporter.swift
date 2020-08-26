@@ -177,7 +177,9 @@ open class ProgressCoordinator: ProgressCensus {
         let remainingProgress = 1.0 - Double(progress.progress)
         
         let remainingDuration = totalDuration * remainingProgress
-        timeRemaining = TimeInterval(exactly: remainingDuration) ?? 0
+        Thread.executeOnMainThread {
+            self.timeRemaining = TimeInterval(exactly: remainingDuration) ?? 0
+        }
         return remainingDuration
     }
     
@@ -189,6 +191,20 @@ open class ProgressCoordinator: ProgressCensus {
             DispatchQueue.main.async {
                 self.watcher?.hasProgressToReport(report: self.progress)
                 self.rawProgress = self.progress.progress
+            }
+        }
+    }
+    
+}
+
+extension Thread {
+    
+    class func executeOnMainThread(task: @escaping (Void) -> Void) {
+        if Thread.isMainThread {
+            task()
+        } else {
+            DispatchQueue.main.async {
+                task()
             }
         }
     }
