@@ -199,7 +199,7 @@ open class ProgressCoordinator: ProgressCensus {
 
 extension Thread {
     
-    class func executeOnMainThread(task: @escaping (Void) -> Void) {
+    class func executeOnMainThread(task: @escaping () -> Void) {
         if Thread.isMainThread {
             task()
         } else {
