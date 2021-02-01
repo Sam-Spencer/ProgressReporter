@@ -1,5 +1,3 @@
-<a href="https://github.blog/2020-11-02-commit-your-vote-on-election-day/"><img src="https://i.imgur.com/jI6ihgo.png" width=100%></a>
-
 # ProgressReporter
 
 A highly abstract method to coordinate input from multiple objects on the progress of a single, complex task.
